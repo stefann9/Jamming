@@ -1,9 +1,17 @@
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <h1>my app</h1>
+    <div>
+      <h1>
+        Ja<span className="highlight">mmm</span>ing
+      </h1>
+      <div className="App">
+        <div className="App-playlist">
+          {/* <!-- Add a SearchResults component -->
+          <!-- Add a Playlist component --> */}
+        </div>
+      </div>
     </div>
   );
 }
