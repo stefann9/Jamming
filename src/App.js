@@ -4,33 +4,37 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import SearchResults from "./components/SearchResults/SearchResults";
 import "./App.css";
 
+const mocksTracksList = [
+  {
+    id: 1,
+    name: "ASASblabla",
+    artist: "sdasdasdas",
+    album: "sadasda",
+  },
+  {
+    id: 2,
+    name: "blabla",
+    artist: "sdasdasdas",
+    album: "sadasda",
+  },
+  {
+    id: 3,
+    name: "blabla",
+    artist: "sdasdasdas",
+    album: "sadasda",
+  },
+  {
+    id: 4,
+    name: "blabla",
+    artist: "sdasdasdas",
+    album: "sadasda",
+  },
+];
+
 function App() {
-  const [searchResults, setSearchResults] = useState([
-    {
-      id: 1,
-      name: "ASASblabla",
-      artist: "sdasdasdas",
-      album: "sadasda",
-    },
-    {
-      id: 2,
-      name: "blabla",
-      artist: "sdasdasdas",
-      album: "sadasda",
-    },
-    {
-      id: 3,
-      name: "blabla",
-      artist: "sdasdasdas",
-      album: "sadasda",
-    },
-    {
-      id: 4,
-      name: "blabla",
-      artist: "sdasdasdas",
-      album: "sadasda",
-    },
-  ]);
+  const [searchResults, setSearchResults] = useState(mocksTracksList);
+  const [playlistName, setPlaylistName] = useState("Playlist name");
+  const [playlistTracks, setPlaylistTracks] = useState(mocksTracksList);
   return (
     <div>
       <h1>
@@ -40,7 +44,10 @@ function App() {
         <SearchBar />
         <div className="App-playlist">
           <SearchResults searchResults={searchResults} />
-          <Playlist />
+          <Playlist
+            playlistName={playlistName}
+            playlistTracks={playlistTracks}
+          />
         </div>
       </div>
     </div>

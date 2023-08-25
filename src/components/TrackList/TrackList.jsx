@@ -1,9 +1,9 @@
 import "./TrackList.css";
 import Track from "../Track/Track";
-const TrackList = ({ searchResults }) => {
+const TrackList = ({ tracks }) => {
   return (
     <div className="TrackList">
-      {searchResults && searchResults.map((track) => (
+      {tracks && tracks.map((track) => (
         <Track key={track.id} track={track} />
       ))}
     </div>

@@ -4,7 +4,7 @@ const SearchResults = ({searchResults}) => {
   return (
     <div className="SearchResults">
       <h2>Results</h2>
-      <TrackList searchResults={searchResults} />
+      <TrackList tracks ={searchResults} />
     </div>
   );
 };
