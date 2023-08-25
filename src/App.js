@@ -10,24 +10,28 @@ const mocksTracksList = [
     name: "ASASblabla",
     artist: "sdasdasdas",
     album: "sadasda",
+    uri:"lala"
   },
   {
     id: 2,
     name: "blabla",
     artist: "sdasdasdas",
     album: "sadasda",
+    uri:"lala"
   },
   {
     id: 3,
     name: "blabla",
     artist: "sdasdasdas",
     album: "sadasda",
+    uri:"lala"
   },
   {
     id: 4,
     name: "blabla",
     artist: "sdasdasdas",
     album: "sadasda",
+    uri:"lala"
   },
 ];
 
@@ -45,6 +49,10 @@ function App() {
       playlistTracks.filter((track) => track.id !== removedTrack.id)
     );
   };
+  const savePlaylist = ()=>{
+    const trackURIs = playlistTracks.map(track => track.uri)
+    console.log(trackURIs)
+  }
 
   return (
     <div>
@@ -60,6 +68,7 @@ function App() {
             setPlaylistName={setPlaylistName}
             playlistTracks={playlistTracks}
             onRemove={removeTrack}
+            onSave={savePlaylist}
           />
         </div>
       </div>

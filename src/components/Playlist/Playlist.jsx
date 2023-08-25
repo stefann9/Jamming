@@ -5,6 +5,7 @@ const Playlist = ({
   setPlaylistName,
   playlistTracks,
   onRemove,
+  onSave
 }) => {
   return (
     <div className="Playlist">
@@ -13,7 +14,7 @@ const Playlist = ({
         onChange={(e) => setPlaylistName(e.target.value)}
       />
       <TrackList tracks={playlistTracks} onRemove={onRemove} isRemoval={true} />
-      <button className="Playlist-save">SAVE TO SPOTIFY</button>
+      <button className="Playlist-save" onClick={onSave}>SAVE TO SPOTIFY</button>
     </div>
   );
 };
