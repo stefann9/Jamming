@@ -57,6 +57,7 @@ function App() {
           <SearchResults searchResults={searchResults} onAdd={addTrack} />
           <Playlist
             playlistName={playlistName}
+            setPlaylistName={setPlaylistName}
             playlistTracks={playlistTracks}
             onRemove={removeTrack}
           />
