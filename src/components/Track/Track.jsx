@@ -1,8 +1,17 @@
 import "./Track.css";
 
-const Track = ({ isRemoval, track }) => {
+const Track = ({ track, onAdd, isRemoval }) => {
   const renderAction = () => {
-    return <button className="Track-action">{isRemoval ? "-" : "+"}</button>;
+    return (
+      <button
+        className="Track-action"
+        onClick={() => {
+          onAdd(track);
+        }}
+      >
+        {isRemoval ? "-" : "+"}
+      </button>
+    );
   };
 
   return (

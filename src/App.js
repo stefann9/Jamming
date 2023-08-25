@@ -34,7 +34,13 @@ const mocksTracksList = [
 function App() {
   const [searchResults, setSearchResults] = useState(mocksTracksList);
   const [playlistName, setPlaylistName] = useState("Playlist name");
-  const [playlistTracks, setPlaylistTracks] = useState(mocksTracksList);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  const addTrack = (track) => {
+    playlistTracks.every((playlistTrack) => playlistTrack.id !== track.id) &&
+      setPlaylistTracks([track, ...playlistTracks]);
+  };
+
   return (
     <div>
       <h1>
@@ -43,7 +49,7 @@ function App() {
       <div className="App">
         <SearchBar />
         <div className="App-playlist">
-          <SearchResults searchResults={searchResults} />
+          <SearchResults searchResults={searchResults} onAdd={addTrack} />
           <Playlist
             playlistName={playlistName}
             playlistTracks={playlistTracks}
