@@ -1,6 +1,6 @@
 import "./TrackList.css";
 import Track from "../Track/Track";
-const TrackList = ({ tracks, onAdd, isRemoval }) => {
+const TrackList = ({ tracks, onAdd, onRemove, isRemoval }) => {
   return (
     <div className="TrackList">
       {tracks &&
@@ -9,6 +9,7 @@ const TrackList = ({ tracks, onAdd, isRemoval }) => {
             key={track.id}
             track={track}
             onAdd={onAdd}
+            onRemove={onRemove}
             isRemoval={isRemoval}
           />
         ))}

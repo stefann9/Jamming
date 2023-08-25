@@ -36,9 +36,14 @@ function App() {
   const [playlistName, setPlaylistName] = useState("Playlist name");
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
-  const addTrack = (track) => {
-    playlistTracks.every((playlistTrack) => playlistTrack.id !== track.id) &&
-      setPlaylistTracks([track, ...playlistTracks]);
+  const addTrack = (newTrack) => {
+    playlistTracks.every((track) => track.id !== newTrack.id) &&
+      setPlaylistTracks([newTrack, ...playlistTracks]);
+  };
+  const removeTrack = (removedTrack) => {
+    setPlaylistTracks(
+      playlistTracks.filter((track) => track.id !== removedTrack.id)
+    );
   };
 
   return (
@@ -53,6 +58,7 @@ function App() {
           <Playlist
             playlistName={playlistName}
             playlistTracks={playlistTracks}
+            onRemove={removeTrack}
           />
         </div>
       </div>

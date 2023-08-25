@@ -1,17 +1,20 @@
 import "./Track.css";
 
-const Track = ({ track, onAdd, isRemoval }) => {
+const Track = ({ track, onAdd, onRemove, isRemoval }) => {
   const renderAction = () => {
-    return (
-      <button
-        className="Track-action"
-        onClick={() => {
-          onAdd(track);
-        }}
-      >
-        {isRemoval ? "-" : "+"}
-      </button>
-    );
+    if (isRemoval) {
+      return (
+        <button className="Track-action" onClick={() => onRemove(track)}>
+          -
+        </button>
+      );
+    } else {
+      return (
+        <button className="Track-action" onClick={() => onAdd(track)}>
+          +
+        </button>
+      );
+    }
   };
 
   return (
