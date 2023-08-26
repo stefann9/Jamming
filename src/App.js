@@ -10,28 +10,28 @@ const mocksTracksList = [
     name: "ASASblabla",
     artist: "sdasdasdas",
     album: "sadasda",
-    uri:"lala"
+    uri: "lala",
   },
   {
     id: 2,
     name: "blabla",
     artist: "sdasdasdas",
     album: "sadasda",
-    uri:"lala"
+    uri: "lala",
   },
   {
     id: 3,
     name: "blabla",
     artist: "sdasdasdas",
     album: "sadasda",
-    uri:"lala"
+    uri: "lala",
   },
   {
     id: 4,
     name: "blabla",
     artist: "sdasdasdas",
     album: "sadasda",
-    uri:"lala"
+    uri: "lala",
   },
 ];
 
@@ -49,10 +49,13 @@ function App() {
       playlistTracks.filter((track) => track.id !== removedTrack.id)
     );
   };
-  const savePlaylist = ()=>{
-    const trackURIs = playlistTracks.map(track => track.uri)
-    console.log(trackURIs)
-  }
+  const savePlaylist = () => {
+    const trackURIs = playlistTracks.map((track) => track.uri);
+    console.log(trackURIs);
+  };
+  const search = (searchTerm) => {
+    console.log(searchTerm);
+  };
 
   return (
     <div>
@@ -60,7 +63,7 @@ function App() {
         Ja<span className="highlight">mmm</span>ing
       </h1>
       <div className="App">
-        <SearchBar />
+        <SearchBar onSearch={search} />
         <div className="App-playlist">
           <SearchResults searchResults={searchResults} onAdd={addTrack} />
           <Playlist
