@@ -5,8 +5,6 @@ import SearchResults from "./components/SearchResults/SearchResults";
 import { spotify } from "./core/utils/Spotify";
 import "./App.css";
 
-
-
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("Playlist name");
@@ -21,13 +19,15 @@ function App() {
       playlistTracks.filter((track) => track.id !== removedTrack.id)
     );
   };
-  const savePlaylist = () => {
+  const savePlaylist = async () => {
     const trackURIs = playlistTracks.map((track) => track.uri);
-    console.log(trackURIs);
+    await spotify.savePlaylist(playlistName, trackURIs);
+    setPlaylistName("Playlist name");
+    setPlaylistTracks([]);
   };
   const search = async (searchTerm) => {
     const tracks = await spotify.search(searchTerm);
-    setSearchResults([...tracks]);
+    setSearchResults(tracks);
   };
 
   return (

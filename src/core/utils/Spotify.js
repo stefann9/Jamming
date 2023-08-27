@@ -2,7 +2,7 @@ let accessToken;
 const clientID = "";
 const redirectURI = "http://localhost:3000/";
 class Spotify {
-  #baseEndPoint = "https://api.spotify.com/v1/";
+  #baseEndPoint = "https://api.spotify.com/v1";
   getAccessToken() {
     if (accessToken) return accessToken;
     let accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
@@ -24,7 +24,7 @@ class Spotify {
   async search(searchTerm) {
     const accessTocken = this.getAccessToken();
     const response = await fetch(
-      `${this.#baseEndPoint}search?type=track&q=${searchTerm}`,
+      `${this.#baseEndPoint}/search?type=track&q=${searchTerm}`,
       {
         headers: { Authorization: `Bearer ${accessTocken}` },
       }
@@ -41,6 +41,43 @@ class Spotify {
           uri: track.uri,
         }));
       }
+    }
+  }
+
+  async getUserId(headers) {
+    const response = await fetch(`${this.#baseEndPoint}/me`, {
+      headers: headers,
+    });
+    if (response.ok) {
+      const responseJSON = await response.json();
+      if (responseJSON.id) return responseJSON.id;
+    }
+  }
+
+  async savePlaylist(name, trackURIs) {
+    if (!name || !trackURIs) return;
+    const accessToken = this.getAccessToken();
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const userID = await this.getUserId(headers);
+    if (!userID) return;
+    const response = await fetch(
+      `${this.#baseEndPoint}/users/${userID}/playlists`,
+      {
+        headers: headers,
+        method: "POST",
+        body: JSON.stringify({ name: name }),
+      }
+    );
+    if (response.ok) {
+      const responseJSON = await response.json();
+      const playlistID = responseJSON.id;
+      await fetch(`${this.#baseEndPoint}/playlists/${playlistID}/tracks`, {
+        headers: headers,
+        method: "POST",
+        body: JSON.stringify({ uris: trackURIs }),
+      });
     }
   }
 }
