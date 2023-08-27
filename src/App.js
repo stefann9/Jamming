@@ -2,41 +2,13 @@ import { useState } from "react";
 import Playlist from "./components/Playlist/Playlist";
 import SearchBar from "./components/SearchBar/SearchBar";
 import SearchResults from "./components/SearchResults/SearchResults";
+import { spotify } from "./core/utils/Spotify";
 import "./App.css";
 
-const mocksTracksList = [
-  {
-    id: 1,
-    name: "ASASblabla",
-    artist: "sdasdasdas",
-    album: "sadasda",
-    uri: "lala",
-  },
-  {
-    id: 2,
-    name: "blabla",
-    artist: "sdasdasdas",
-    album: "sadasda",
-    uri: "lala",
-  },
-  {
-    id: 3,
-    name: "blabla",
-    artist: "sdasdasdas",
-    album: "sadasda",
-    uri: "lala",
-  },
-  {
-    id: 4,
-    name: "blabla",
-    artist: "sdasdasdas",
-    album: "sadasda",
-    uri: "lala",
-  },
-];
+
 
 function App() {
-  const [searchResults, setSearchResults] = useState(mocksTracksList);
+  const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("Playlist name");
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
@@ -53,8 +25,9 @@ function App() {
     const trackURIs = playlistTracks.map((track) => track.uri);
     console.log(trackURIs);
   };
-  const search = (searchTerm) => {
-    console.log(searchTerm);
+  const search = async (searchTerm) => {
+    const tracks = await spotify.search(searchTerm);
+    setSearchResults([...tracks]);
   };
 
   return (
