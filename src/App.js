@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Playlist from "./components/Playlist/Playlist";
 import SearchBar from "./components/SearchBar/SearchBar";
-import SearchResults from "./components/SearchResults/SearchResults";
+import SearchResults from "./components/SearchResults/SearchResults"
+import UserPlaylists from "./components/UserPlaylists/UserPlaylists";
 import { spotify } from "./core/utils/Spotify";
 import "./App.css";
 
@@ -46,6 +47,7 @@ function App() {
             onRemove={removeTrack}
             onSave={savePlaylist}
           />
+          <UserPlaylists />
         </div>
       </div>
     </div>
