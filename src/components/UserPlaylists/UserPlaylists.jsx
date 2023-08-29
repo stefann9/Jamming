@@ -4,7 +4,7 @@ import "./UserPlaylists.css";
 const UserPlaylists = ({ userPlaylists }) => {
   return (
     <div className="UserPlaylists">
-      <h1>Your playlists</h1>
+      <h2>Your playlists</h2>
       <button className="Playlist-select">New Playlist</button>
       {userPlaylists.map((playlist) => (
         <CurrentPlaylist
