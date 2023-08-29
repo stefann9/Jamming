@@ -1,0 +1,26 @@
+ .User-Playlist{
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 1rem;
+ }
+ 
+ 
+ .User-Playlist h3 {
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+
+.Track-action {
+    cursor: pointer;
+    padding: .5rem;
+    font-size: 1.05rem;
+    transition: color .25s;
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    color: #fff;
+  }
+  .Track-action:hover {
+    color: rgba(265, 265, 265, .5);
+  }
+  
