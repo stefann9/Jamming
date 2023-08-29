@@ -80,6 +80,30 @@ class Spotify {
       });
     }
   }
+
+  async getUserPlaylists() {
+    const accessToken = this.getAccessToken();
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const userID = await this.getUserId(headers);
+    const response = await fetch(
+      `${this.#baseEndPoint}/users/${userID}/playlists`,
+      {
+        headers: headers,
+        method: "GET",
+      }
+    );
+    if (response.ok) {
+      const responseJSON = await response.json();
+      if (responseJSON) {
+        return responseJSON.items.map((playlist) => ({
+          name: playlist.name,
+          id: playlist.id,
+        }));
+      }
+    }
+  }
 }
 
 export const spotify = new Spotify();

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Playlist from "./components/Playlist/Playlist";
 import SearchBar from "./components/SearchBar/SearchBar";
-import SearchResults from "./components/SearchResults/SearchResults"
+import SearchResults from "./components/SearchResults/SearchResults";
 import UserPlaylists from "./components/UserPlaylists/UserPlaylists";
 import { spotify } from "./core/utils/Spotify";
 import "./App.css";
@@ -10,6 +10,12 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("Playlist name");
   const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  const [userPlaylists, setUserPlaylists] = useState([]);
+
+  useEffect(() => {
+    spotify.getUserPlaylists().then(playlists => setUserPlaylists(playlists))
+  }, []);
 
   const addTrack = (newTrack) => {
     playlistTracks.every((track) => track.id !== newTrack.id) &&
@@ -47,7 +53,7 @@ function App() {
             onRemove={removeTrack}
             onSave={savePlaylist}
           />
-          <UserPlaylists />
+          <UserPlaylists userPlaylists={userPlaylists} />
         </div>
       </div>
     </div>

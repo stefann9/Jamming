@@ -1,12 +1,17 @@
 import CurrentPlaylist from "../CurrentPlaylist/CurrentPlaylist";
 import "./UserPlaylists.css";
 
-const UserPlaylists = () => {
+const UserPlaylists = ({ userPlaylists }) => {
   return (
     <div className="UserPlaylists">
       <h1>Your playlists</h1>
-      <CurrentPlaylist />
       <button className="Playlist-select">New Playlist</button>
+      {userPlaylists.map((playlist) => (
+        <CurrentPlaylist
+          key={playlist.id}
+          playlist={playlist}
+        />
+      ))}
     </div>
   );
 };

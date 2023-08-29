@@ -1,8 +1,8 @@
 import "./CurrentPlaylist.css";
-const CurrentPlaylist = () => {
+const CurrentPlaylist = ({playlist}) => {
   return (
     <div className="User-Playlist">
-      <h3>Name</h3>
+      <h3>{playlist.name}</h3>
       <button className="Track-action">+</button>
     </div>
   );
