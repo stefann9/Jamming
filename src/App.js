@@ -30,9 +30,7 @@ function App() {
     const trackURIs = playlistTracks.map((track) => track.uri);
     await spotify.savePlaylist(playlistName, trackURIs, playlistID);
     if(!playlistID) setUserPlaylists( await spotify.getUserPlaylists())
-    setPlaylistName("Playlist name");
-    setPlaylistTracks([]);
-    setPlaylistID(null);
+    onNewPlaylist()
   };
   const search = async (searchTerm) => {
     const tracks = await spotify.search(searchTerm);
@@ -44,7 +42,11 @@ function App() {
     setPlaylistName(playlist.name);
     setPlaylistID(playlist.id);
   };
-
+  const onNewPlaylist = () =>{
+    setPlaylistName("Playlist name");
+    setPlaylistTracks([]);
+    setPlaylistID(null);
+  }
   return (
     <div>
       <h1>
@@ -64,6 +66,7 @@ function App() {
           <UserPlaylists
             userPlaylists={userPlaylists}
             getUserPlaylistTracks={getUserPlaylistTracks}
+            onNewPlaylist={onNewPlaylist}
           />
         </div>
       </div>
