@@ -10,7 +10,7 @@ const Playlist = ({
   return (
     <div className="Playlist">
       <input
-        defaultValue={playlistName}
+        value={playlistName}
         onChange={(e) => setPlaylistName(e.target.value)}
       />
       <TrackList tracks={playlistTracks} onRemove={onRemove} isRemoval={true} />

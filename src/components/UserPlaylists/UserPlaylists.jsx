@@ -1,7 +1,7 @@
 import CurrentPlaylist from "../CurrentPlaylist/CurrentPlaylist";
 import "./UserPlaylists.css";
 
-const UserPlaylists = ({ userPlaylists }) => {
+const UserPlaylists = ({ userPlaylists, getUserPlaylistTracks }) => {
   return (
     <div className="UserPlaylists">
       <h2>Your playlists</h2>
@@ -10,6 +10,7 @@ const UserPlaylists = ({ userPlaylists }) => {
         <CurrentPlaylist
           key={playlist.id}
           playlist={playlist}
+          getUserPlaylistTracks={getUserPlaylistTracks}
         />
       ))}
     </div>

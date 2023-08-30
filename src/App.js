@@ -14,7 +14,7 @@ function App() {
   const [userPlaylists, setUserPlaylists] = useState([]);
 
   useEffect(() => {
-    spotify.getUserPlaylists().then(playlists => setUserPlaylists(playlists))
+    spotify.getUserPlaylists().then((playlists) => setUserPlaylists(playlists));
   }, []);
 
   const addTrack = (newTrack) => {
@@ -37,6 +37,11 @@ function App() {
     setSearchResults(tracks);
   };
 
+  const getUserPlaylistTracks = async (playlist) => {
+    setPlaylistName(playlist.name)
+    setPlaylistTracks(await spotify.getUserPlaylistTracks(playlist.id))
+  };
+
   return (
     <div>
       <h1>
@@ -53,7 +58,10 @@ function App() {
             onRemove={removeTrack}
             onSave={savePlaylist}
           />
-          <UserPlaylists userPlaylists={userPlaylists} />
+          <UserPlaylists
+            userPlaylists={userPlaylists}
+            getUserPlaylistTracks={getUserPlaylistTracks}
+          />
         </div>
       </div>
     </div>

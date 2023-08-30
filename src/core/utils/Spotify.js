@@ -104,6 +104,29 @@ class Spotify {
       }
     }
   }
+  async getUserPlaylistTracks(playlistID) {
+    const accessToken = this.getAccessToken();
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const response = await fetch(
+      `${this.#baseEndPoint}/playlists/${playlistID}/tracks`,
+      {
+        headers: headers,
+        method: "GET",
+      }
+    );
+    if (response.ok) {
+      const responseJSON = await response.json();
+      return responseJSON.items.map((item) => ({
+        id: item.track.id,
+        name: item.track.name,
+        artist: item.track.artists[0].name,
+        album: item.track.album.name,
+        uri: item.track.uri,
+      }));
+    }
+  }
 }
 
 export const spotify = new Spotify();
