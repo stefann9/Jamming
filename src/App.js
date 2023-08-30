@@ -9,8 +9,8 @@ import "./App.css";
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("Playlist name");
+  const [playlistID, setPlaylistID] = useState(null);
   const [playlistTracks, setPlaylistTracks] = useState([]);
-
   const [userPlaylists, setUserPlaylists] = useState([]);
 
   useEffect(() => {
@@ -28,9 +28,10 @@ function App() {
   };
   const savePlaylist = async () => {
     const trackURIs = playlistTracks.map((track) => track.uri);
-    await spotify.savePlaylist(playlistName, trackURIs);
+    await spotify.savePlaylist(playlistName, trackURIs, playlistID);
     setPlaylistName("Playlist name");
     setPlaylistTracks([]);
+    setPlaylistID(null);
   };
   const search = async (searchTerm) => {
     const tracks = await spotify.search(searchTerm);
@@ -38,8 +39,9 @@ function App() {
   };
 
   const getUserPlaylistTracks = async (playlist) => {
-    setPlaylistName(playlist.name)
-    setPlaylistTracks(await spotify.getUserPlaylistTracks(playlist.id))
+    setPlaylistTracks(await spotify.getUserPlaylistTracks(playlist.id));
+    setPlaylistName(playlist.name);
+    setPlaylistID(playlist.id);
   };
 
   return (

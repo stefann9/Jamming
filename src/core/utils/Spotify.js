@@ -54,30 +54,38 @@ class Spotify {
     }
   }
 
-  async savePlaylist(name, trackURIs) {
+  async savePlaylist(name, trackURIs, playlistID) {
     if (!name || !trackURIs) return;
     const accessToken = this.getAccessToken();
     const headers = {
       Authorization: `Bearer ${accessToken}`,
     };
-    const userID = await this.getUserId(headers);
-    if (!userID) return;
-    const response = await fetch(
-      `${this.#baseEndPoint}/users/${userID}/playlists`,
-      {
+    if (playlistID) {
+      return fetch(`${this.#baseEndPoint}/playlists/${playlistID}/tracks`, {
         headers: headers,
-        method: "POST",
-        body: JSON.stringify({ name: name }),
-      }
-    );
-    if (response.ok) {
-      const responseJSON = await response.json();
-      const playlistID = responseJSON.id;
-      await fetch(`${this.#baseEndPoint}/playlists/${playlistID}/tracks`, {
-        headers: headers,
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({ uris: trackURIs }),
       });
+    } else {
+      const userID = await this.getUserId(headers);
+      if (!userID) return;
+      const response = await fetch(
+        `${this.#baseEndPoint}/users/${userID}/playlists`,
+        {
+          headers: headers,
+          method: "POST",
+          body: JSON.stringify({ name: name }),
+        }
+      );
+      if (response.ok) {
+        const responseJSON = await response.json();
+        const playlistID = responseJSON.id;
+        await fetch(`${this.#baseEndPoint}/playlists/${playlistID}/tracks`, {
+          headers: headers,
+          method: "POST",
+          body: JSON.stringify({ uris: trackURIs }),
+        });
+      }
     }
   }
 
