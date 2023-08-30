@@ -29,6 +29,7 @@ function App() {
   const savePlaylist = async () => {
     const trackURIs = playlistTracks.map((track) => track.uri);
     await spotify.savePlaylist(playlistName, trackURIs, playlistID);
+    if(!playlistID) setUserPlaylists( await spotify.getUserPlaylists())
     setPlaylistName("Playlist name");
     setPlaylistTracks([]);
     setPlaylistID(null);
