@@ -46,48 +46,6 @@ class Spotify {
     }
   }
 
-  async savePlaylist(name, trackURIs, playlistID) {
-    if (!name || !trackURIs.length) return;
-    try {
-      const accessToken = this.getAccessToken();
-      const headers = { Authorization: `Bearer ${accessToken}` };
-
-      if (playlistID) {
-        const urlUpdatePlaylist = `${
-          this.#baseEndPoint
-        }/playlists/${playlistID}/tracks`;
-        const bodyUpdatePlaylist = { uris: trackURIs };
-
-        return httpClient.put(urlUpdatePlaylist, headers, bodyUpdatePlaylist);
-      } else {
-        const { id: userID } = await this.getUserId(headers);
-        if (!userID) return;
-
-        const urlPostNewPlaylist = `${
-          this.#baseEndPoint
-        }/users/${userID}/playlists`;
-        const bodyPostNewPlaylist = { name: name };
-
-        const { id: playlistID } = await httpClient.post(
-          urlPostNewPlaylist,
-          headers,
-          bodyPostNewPlaylist
-        );
-
-        if (playlistID) {
-          const urlPostTracks = `${
-            this.#baseEndPoint
-          }/playlists/${playlistID}/tracks`;
-          const bodyPostTracks = { uris: trackURIs };
-
-          await httpClient.post(urlPostTracks, headers, bodyPostTracks);
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   async getUserPlaylists() {
     try {
       const accessToken = this.getAccessToken();
@@ -114,6 +72,56 @@ class Spotify {
 
       const tracks = await httpClient.get(urlGetTracks, headers);
       return tracks;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async updateUserPlaylist(playlistID, trackURIs, headers) {
+    try {
+      const urlUpdatePlaylist = `${
+        this.#baseEndPoint
+      }/playlists/${playlistID}/tracks`;
+      const bodyUpdatePlaylist = { uris: trackURIs };
+
+      return httpClient.put(urlUpdatePlaylist, headers, bodyUpdatePlaylist);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async savePlaylist(name, trackURIs, playlistID) {
+    if (!name || !trackURIs.length) return;
+    try {
+      const accessToken = this.getAccessToken();
+      const headers = { Authorization: `Bearer ${accessToken}` };
+
+      if (playlistID) this.updateUserPlaylist(playlistID, trackURIs, headers);
+      
+      else {
+        const { id: userID } = await this.getUserId(headers);
+        if (!userID) return;
+
+        const urlPostNewPlaylist = `${
+          this.#baseEndPoint
+        }/users/${userID}/playlists`;
+        const bodyPostNewPlaylist = { name: name };
+
+        const { id: playlistID } = await httpClient.post(
+          urlPostNewPlaylist,
+          headers,
+          bodyPostNewPlaylist
+        );
+
+        if (playlistID) {
+          const urlPostTracks = `${
+            this.#baseEndPoint
+          }/playlists/${playlistID}/tracks`;
+          const bodyPostTracks = { uris: trackURIs };
+
+          await httpClient.post(urlPostTracks, headers, bodyPostTracks);
+        }
+      }
     } catch (e) {
       console.error(e);
     }
