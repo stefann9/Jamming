@@ -1,3 +1,4 @@
+import { httpClient } from "../httpClient/HttpClient";
 let accessToken;
 const clientID = "";
 const redirectURI = "http://localhost:3000/";
@@ -22,117 +23,99 @@ class Spotify {
   }
 
   async search(searchTerm) {
-    const accessTocken = this.getAccessToken();
-    const response = await fetch(
-      `${this.#baseEndPoint}/search?type=track&q=${searchTerm}`,
-      {
-        headers: { Authorization: `Bearer ${accessTocken}` },
-      }
-    );
-    if (response.ok) {
-      const responseJSON = await response.json();
-      if (!responseJSON.tracks.items) return [];
-      else {
-        return responseJSON.tracks.items.map((track) => ({
-          id: track.id,
-          name: track.name,
-          artist: track.artists[0].name,
-          album: track.album.name,
-          uri: track.uri,
-        }));
-      }
+    try {
+      const url = `${this.#baseEndPoint}/search?type=track&q=${searchTerm}`;
+      const accessTocken = this.getAccessToken();
+      const headers = { Authorization: `Bearer ${accessTocken}` };
+
+      const response = await httpClient.get(url, headers);
+      if (response) return response;
+    } catch (e) {
+      console.error(e);
     }
   }
 
   async getUserId(headers) {
-    const response = await fetch(`${this.#baseEndPoint}/me`, {
-      headers: headers,
-    });
-    if (response.ok) {
-      const responseJSON = await response.json();
-      if (responseJSON.id) return responseJSON.id;
+    try {
+      const url = `${this.#baseEndPoint}/me`;
+
+      const response = await httpClient.get(url, headers);
+      if (response) return response;
+    } catch (e) {
+      console.error(e);
     }
   }
 
   async savePlaylist(name, trackURIs, playlistID) {
-    if (!name || !trackURIs) return;
-    const accessToken = this.getAccessToken();
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-    if (playlistID) {
-      return fetch(`${this.#baseEndPoint}/playlists/${playlistID}/tracks`, {
-        headers: headers,
-        method: "PUT",
-        body: JSON.stringify({ uris: trackURIs }),
-      });
-    } else {
-      const userID = await this.getUserId(headers);
-      if (!userID) return;
-      const response = await fetch(
-        `${this.#baseEndPoint}/users/${userID}/playlists`,
-        {
-          headers: headers,
-          method: "POST",
-          body: JSON.stringify({ name: name }),
+    if (!name || !trackURIs.length) return;
+    try {
+      const accessToken = this.getAccessToken();
+      const headers = { Authorization: `Bearer ${accessToken}` };
+
+      if (playlistID) {
+        const urlUpdatePlaylist = `${
+          this.#baseEndPoint
+        }/playlists/${playlistID}/tracks`;
+        const bodyUpdatePlaylist = { uris: trackURIs };
+
+        return httpClient.put(urlUpdatePlaylist, headers, bodyUpdatePlaylist);
+      } else {
+        const { id: userID } = await this.getUserId(headers);
+        if (!userID) return;
+
+        const urlPostNewPlaylist = `${
+          this.#baseEndPoint
+        }/users/${userID}/playlists`;
+        const bodyPostNewPlaylist = { name: name };
+
+        const { id: playlistID } = await httpClient.post(
+          urlPostNewPlaylist,
+          headers,
+          bodyPostNewPlaylist
+        );
+
+        if (playlistID) {
+          const urlPostTracks = `${
+            this.#baseEndPoint
+          }/playlists/${playlistID}/tracks`;
+          const bodyPostTracks = { uris: trackURIs };
+
+          await httpClient.post(urlPostTracks, headers, bodyPostTracks);
         }
-      );
-      if (response.ok) {
-        const responseJSON = await response.json();
-        const playlistID = responseJSON.id;
-        await fetch(`${this.#baseEndPoint}/playlists/${playlistID}/tracks`, {
-          headers: headers,
-          method: "POST",
-          body: JSON.stringify({ uris: trackURIs }),
-        });
       }
+    } catch (e) {
+      console.error(e);
     }
   }
 
   async getUserPlaylists() {
-    const accessToken = this.getAccessToken();
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-    const userID = await this.getUserId(headers);
-    const response = await fetch(
-      `${this.#baseEndPoint}/users/${userID}/playlists`,
-      {
-        headers: headers,
-        method: "GET",
-      }
-    );
-    if (response.ok) {
-      const responseJSON = await response.json();
-      if (responseJSON) {
-        return responseJSON.items.map((playlist) => ({
-          name: playlist.name,
-          id: playlist.id,
-        }));
-      }
+    try {
+      const accessToken = this.getAccessToken();
+      const headers = { Authorization: `Bearer ${accessToken}` };
+
+      const { id: userID } = await this.getUserId(headers);
+      if (!userID) return;
+      const urlGetPlaylists = `${this.#baseEndPoint}/users/${userID}/playlists`;
+
+      const userPlaylists = await httpClient.get(urlGetPlaylists, headers);
+      return userPlaylists;
+    } catch (e) {
+      console.error(e);
     }
   }
+
   async getUserPlaylistTracks(playlistID) {
-    const accessToken = this.getAccessToken();
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-    const response = await fetch(
-      `${this.#baseEndPoint}/playlists/${playlistID}/tracks`,
-      {
-        headers: headers,
-        method: "GET",
-      }
-    );
-    if (response.ok) {
-      const responseJSON = await response.json();
-      return responseJSON.items.map((item) => ({
-        id: item.track.id,
-        name: item.track.name,
-        artist: item.track.artists[0].name,
-        album: item.track.album.name,
-        uri: item.track.uri,
-      }));
+    try {
+      const accessToken = this.getAccessToken();
+      const headers = { Authorization: `Bearer ${accessToken}` };
+      const urlGetTracks = `${
+        this.#baseEndPoint
+      }/playlists/${playlistID}/tracks`;
+
+      const tracks = await httpClient.get(urlGetTracks, headers);
+      return tracks;
+    } catch (e) {
+      console.error(e);
     }
   }
 }

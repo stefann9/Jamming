@@ -14,7 +14,14 @@ function App() {
   const [userPlaylists, setUserPlaylists] = useState([]);
 
   useEffect(() => {
-    spotify.getUserPlaylists().then((playlists) => setUserPlaylists(playlists));
+    spotify.getUserPlaylists().then((playlists) => {
+      setUserPlaylists(
+        playlists.items.map((playlist) => ({
+          name: playlist.name,
+          id: playlist.id,
+        }))
+      );
+    });
   }, []);
 
   const addTrack = (newTrack) => {
@@ -29,24 +36,53 @@ function App() {
   const savePlaylist = async () => {
     const trackURIs = playlistTracks.map((track) => track.uri);
     await spotify.savePlaylist(playlistName, trackURIs, playlistID);
-    if(!playlistID) setUserPlaylists( await spotify.getUserPlaylists())
-    onNewPlaylist()
+    if (!playlistID) {
+      const playlists = await spotify.getUserPlaylists();
+      setUserPlaylists(
+        playlists.items.map((playlist) => ({
+          name: playlist.name,
+          id: playlist.id,
+        }))
+      );
+    }
+    onNewPlaylist();
   };
   const search = async (searchTerm) => {
-    const tracks = await spotify.search(searchTerm);
+    const response = await spotify.search(searchTerm);
+    let tracks;
+    if (!response?.tracks.items) tracks = [];
+    else {
+      tracks = response.tracks.items.map((track) => ({
+        id: track.id,
+        name: track.name,
+        artist: track.artists[0].name,
+        album: track.album.name,
+        uri: track.uri,
+      }));
+    }
     setSearchResults(tracks);
   };
 
   const getUserPlaylistTracks = async (playlist) => {
-    setPlaylistTracks(await spotify.getUserPlaylistTracks(playlist.id));
+    const tracks = await spotify.getUserPlaylistTracks(playlist.id);
+
+    setPlaylistTracks(
+      tracks.items.map((item) => ({
+        id: item.track.id,
+        name: item.track.name,
+        artist: item.track.artists[0].name,
+        album: item.track.album.name,
+        uri: item.track.uri,
+      }))
+    );
     setPlaylistName(playlist.name);
     setPlaylistID(playlist.id);
   };
-  const onNewPlaylist = () =>{
+  const onNewPlaylist = () => {
     setPlaylistName("Playlist name");
     setPlaylistTracks([]);
     setPlaylistID(null);
-  }
+  };
   return (
     <div>
       <h1>
