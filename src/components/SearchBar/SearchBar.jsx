@@ -11,6 +11,12 @@ const SearchBar = ({ onSearch }) => {
           setSearchTerm(e.target.value);
         }}
         placeholder="Enter A Song, Album, or Artist"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onSearch(searchTerm);
+            setSearchTerm("");
+          }
+        }}
       />
       <button
         className="SearchButton"
