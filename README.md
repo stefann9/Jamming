@@ -1,3 +1,13 @@
+
+# About
+
+This project was part of the Front-End Engineer Career Path - codecademy course. This consists in building a website that allows you to search the Spotify library, create a custom playlist, then save it to Spotify account, using React and Spotify API. 
+In addition, I used function components instead of class component and I added a few new features like seeing your Spotify playlists, modify them by adding or removing tracks.
+
+# Setup
+
+To make requests you need to obtain a Spotify access token by using [Implicit Grant Flow](https://developer.spotify.com/documentation/web-api/tutorials/implicit-flow)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
